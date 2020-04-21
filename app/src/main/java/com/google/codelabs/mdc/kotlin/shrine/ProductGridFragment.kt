@@ -1,8 +1,11 @@
 package com.google.codelabs.mdc.kotlin.shrine
 
+import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +26,19 @@ class ProductGridFragment : Fragment() {
 
         // Set up the toolbar.
         (activity as AppCompatActivity).setSupportActionBar(view.app_bar)
+        view.app_bar.setNavigationOnClickListener(
+                NavigationIconClickListener(
+                        activity!!,
+                        view.product_grid,
+                        AccelerateDecelerateInterpolator(),
+                        ContextCompat.getDrawable(context!!, R.drawable.shr_branded_menu),
+                        ContextCompat.getDrawable(context!!, R.drawable.shr_close_menu)
+                ))
+
+        // Set cut corner background for API 23+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            view.product_grid.background = context?.getDrawable(R.drawable.shr_product_grid_background_shape)
+        }
 
         // Set up the RecyclerView
         view.recycler_view.setHasFixedSize(true)
